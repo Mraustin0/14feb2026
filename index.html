@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Happy Valentine's Day</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Kanit:wght@200;300;400&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&family=Kanit:wght@200;300;400;600&display=swap');
 
         * {
             margin: 0;
@@ -14,21 +14,24 @@
         }
 
         :root {
-            --rose: #e84393;
-            --deep-rose: #c0392b;
-            --pink: #fd79a8;
-            --light-pink: #ffeef7;
-            --gold: #f39c12;
-            --cream: #fff5f5;
-            --dark: #2d1b2e;
+            --bg: #1a1a1a;
+            --bg-deep: #111111;
+            --accent: #c8a2c8;
+            --accent-warm: #e8b4b8;
+            --text: #f5f0eb;
+            --text-dim: rgba(245, 240, 235, 0.4);
+            --highlight: #d4a574;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
             font-family: 'Kanit', sans-serif;
-            background: var(--dark);
-            color: #fff;
+            background: var(--bg);
+            color: var(--text);
             overflow-x: hidden;
-            cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'><text y='15' font-size='15'>💕</text></svg>"), auto;
         }
 
         /* ===== LOADING SCREEN ===== */
@@ -36,13 +39,13 @@
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background: radial-gradient(ellipse at center, #1a0a1e, #0d0510);
+            background: var(--bg-deep);
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
             z-index: 10000;
-            transition: opacity 1s ease, visibility 1s ease;
+            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+                        visibility 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         #loading-screen.hidden {
@@ -50,71 +53,27 @@
             visibility: hidden;
         }
 
-        .loading-heart {
-            font-size: 60px;
-            animation: heartPulse 1s ease-in-out infinite;
+        .loading-line {
+            width: 60px;
+            height: 1px;
+            background: var(--accent);
+            animation: loadPulse 1.5s ease-in-out infinite;
         }
 
-        .loading-text {
-            font-family: 'Great Vibes', cursive;
-            font-size: 28px;
-            color: var(--pink);
-            margin-top: 20px;
-            animation: fadeInOut 2s ease-in-out infinite;
+        @keyframes loadPulse {
+            0%, 100% { width: 60px; opacity: 0.3; }
+            50% { width: 120px; opacity: 1; }
         }
 
-        @keyframes heartPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.3); }
-        }
-
-        @keyframes fadeInOut {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
-        }
-
-        /* ===== FLOATING HEARTS BACKGROUND ===== */
-        .floating-hearts {
+        /* ===== NOISE TEXTURE OVERLAY ===== */
+        body::after {
+            content: '';
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
             pointer-events: none;
-            z-index: 1;
-            overflow: hidden;
-        }
-
-        .floating-heart {
-            position: absolute;
-            bottom: -50px;
-            animation: floatUp linear infinite;
-            opacity: 0.15;
-            filter: blur(1px);
-        }
-
-        @keyframes floatUp {
-            0% {
-                transform: translateY(0) rotate(0deg) scale(1);
-                opacity: 0;
-            }
-            10% { opacity: 0.15; }
-            90% { opacity: 0.15; }
-            100% {
-                transform: translateY(-110vh) rotate(720deg) scale(0.5);
-                opacity: 0;
-            }
-        }
-
-        /* ===== SPARKLE CURSOR TRAIL ===== */
-        .sparkle {
-            position: fixed;
-            pointer-events: none;
-            z-index: 9999;
-            animation: sparkleAnim 0.8s ease-out forwards;
-        }
-
-        @keyframes sparkleAnim {
-            0% { transform: scale(1) rotate(0deg); opacity: 1; }
-            100% { transform: scale(0) rotate(180deg); opacity: 0; }
+            z-index: 9998;
         }
 
         /* ===== HERO SECTION ===== */
@@ -126,94 +85,103 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 20px;
-            z-index: 2;
+            padding: 40px 24px;
+            overflow: hidden;
         }
 
-        .hero-content {
-            animation: fadeInUp 1.5s ease-out;
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .date-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, var(--rose), var(--pink));
-            padding: 8px 24px;
-            border-radius: 50px;
-            font-size: 14px;
-            letter-spacing: 3px;
+        .hero-badge {
+            font-size: 11px;
+            letter-spacing: 4px;
             text-transform: uppercase;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 20px rgba(232, 67, 147, 0.4);
+            color: var(--text-dim);
+            margin-bottom: 48px;
+            opacity: 0;
+            animation: fadeIn 1s ease 0.5s forwards;
         }
 
-        .hero h1 {
-            font-family: 'Great Vibes', cursive;
-            font-size: clamp(48px, 10vw, 100px);
-            background: linear-gradient(135deg, #fff, var(--pink), #fff, var(--gold));
-            background-size: 300% 300%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: shimmer 4s ease-in-out infinite;
-            line-height: 1.2;
-            margin-bottom: 10px;
-        }
-
-        @keyframes shimmer {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-
-        .hero h2 {
+        .hero-title {
             font-family: 'Playfair Display', serif;
-            font-size: clamp(18px, 3vw, 28px);
-            font-weight: 300;
-            color: var(--pink);
-            margin-bottom: 30px;
+            font-weight: 900;
+            font-size: clamp(42px, 10vw, 120px);
+            line-height: 0.95;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            max-width: 900px;
+        }
+
+        .hero-title .line {
+            display: block;
+            overflow: hidden;
+        }
+
+        .hero-title .line span {
+            display: inline-block;
+            transform: translateY(110%);
+            animation: revealUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .hero-title .line:nth-child(1) span { animation-delay: 0.6s; }
+        .hero-title .line:nth-child(2) span { animation-delay: 0.75s; }
+        .hero-title .line:nth-child(3) span { animation-delay: 0.9s; }
+
+        .hero-title .accent {
             font-style: italic;
+            color: var(--accent);
         }
 
-        .hero-divider {
-            width: 100px;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--gold), transparent);
-            margin: 0 auto 30px;
+        .hero-title .warm {
+            font-style: italic;
+            color: var(--highlight);
         }
 
-        .hero-message {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(16px, 2.5vw, 22px);
-            color: rgba(255, 255, 255, 0.85);
-            max-width: 600px;
-            line-height: 1.8;
-            margin-bottom: 40px;
+        @keyframes revealUp {
+            to { transform: translateY(0); }
         }
 
-        .scroll-hint {
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        .hero-sub {
+            font-weight: 200;
+            font-size: clamp(13px, 1.5vw, 16px);
+            color: var(--text-dim);
+            margin-top: 40px;
+            letter-spacing: 2px;
+            opacity: 0;
+            animation: fadeIn 1s ease 1.3s forwards;
+        }
+
+        .scroll-indicator {
             position: absolute;
-            bottom: 30px;
+            bottom: 40px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 8px;
-            animation: bounce 2s ease-in-out infinite;
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 12px;
+            opacity: 0;
+            animation: fadeIn 1s ease 1.8s forwards;
         }
 
-        .scroll-hint .arrow {
-            font-size: 20px;
+        .scroll-indicator span {
+            font-size: 10px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--text-dim);
         }
 
-        @keyframes bounce {
-            0%, 100% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(10px); }
+        .scroll-line {
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--accent), transparent);
+            animation: scrollPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes scrollPulse {
+            0%, 100% { opacity: 0.3; transform: scaleY(1); }
+            50% { opacity: 1; transform: scaleY(1.3); }
         }
 
         /* ===== THREE.JS SECTION ===== */
@@ -223,7 +191,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 2;
         }
 
         #three-container {
@@ -240,251 +207,295 @@
 
         .three-overlay {
             position: absolute;
-            bottom: 40px;
+            bottom: 60px;
             left: 50%;
             transform: translateX(-50%);
             text-align: center;
-            z-index: 10;
         }
 
         .three-overlay h3 {
-            font-family: 'Great Vibes', cursive;
-            font-size: clamp(30px, 5vw, 50px);
-            color: #fff;
-            text-shadow: 0 0 30px rgba(232, 67, 147, 0.8);
-            margin-bottom: 10px;
+            font-family: 'Playfair Display', serif;
+            font-weight: 900;
+            font-size: clamp(24px, 4vw, 40px);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         .three-overlay p {
-            font-family: 'Kanit', sans-serif;
             font-weight: 200;
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.5);
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            margin-top: 12px;
         }
 
-        /* ===== LOVE LETTER SECTION ===== */
-        .love-letter-section {
-            position: relative;
+        /* ===== LETTER SECTION ===== */
+        .letter-section {
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 60px 20px;
-            z-index: 2;
+            padding: 80px 24px;
         }
 
-        .envelope {
-            width: min(500px, 90vw);
-            perspective: 1000px;
-            cursor: pointer;
+        .letter-card {
+            max-width: 560px;
+            width: 100%;
+            opacity: 0;
+            transform: translateY(60px);
+            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .envelope-wrapper {
-            position: relative;
-            transition: transform 0.6s ease;
+        .letter-card.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
-        .envelope-body {
-            background: linear-gradient(145deg, #f5e6d3, #eddcc8);
-            border-radius: 10px;
-            padding: 40px 30px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-            position: relative;
-            overflow: hidden;
+        .letter-label {
+            font-size: 10px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            margin-bottom: 32px;
         }
 
-        .envelope-body::before {
-            content: '';
-            position: absolute;
-            top: -30px;
-            left: 50%;
-            transform: translateX(-50%) rotate(45deg);
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, var(--rose), var(--pink));
-            border-radius: 5px;
-        }
-
-        .letter-stamp {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            width: 50px;
-            height: 60px;
-            border: 2px solid var(--rose);
-            border-radius: 3px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            background: rgba(232, 67, 147, 0.1);
-        }
-
-        .letter-content {
-            color: var(--dark);
+        .letter-heading {
             font-family: 'Playfair Display', serif;
+            font-weight: 900;
+            font-size: clamp(32px, 5vw, 48px);
+            text-transform: uppercase;
+            line-height: 1;
+            margin-bottom: 40px;
         }
 
-        .letter-content .to {
-            font-size: 14px;
-            color: #888;
-            margin-bottom: 20px;
+        .letter-heading .accent {
+            font-style: italic;
+            color: var(--accent);
         }
 
-        .letter-content h3 {
-            font-family: 'Great Vibes', cursive;
-            font-size: 32px;
-            color: var(--deep-rose);
-            margin-bottom: 20px;
-        }
-
-        .letter-content p {
+        .letter-body p {
+            font-weight: 200;
             font-size: 15px;
             line-height: 2;
-            color: #555;
-            margin-bottom: 15px;
+            color: rgba(245, 240, 235, 0.65);
+            margin-bottom: 24px;
         }
 
-        .letter-content .signature {
-            font-family: 'Great Vibes', cursive;
-            font-size: 28px;
-            color: var(--rose);
-            text-align: right;
-            margin-top: 20px;
+        .letter-signature {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 20px;
+            color: var(--accent-warm);
+            margin-top: 40px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(245, 240, 235, 0.08);
         }
 
-        .letter-seal {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, var(--deep-rose), var(--rose));
-            border-radius: 50%;
+        .letter-divider {
+            width: 40px;
+            height: 1px;
+            background: var(--accent);
+            margin-bottom: 32px;
+        }
+
+        /* ===== MARQUEE TEXT ===== */
+        .marquee-section {
+            padding: 80px 0;
+            overflow: hidden;
+            border-top: 1px solid rgba(245, 240, 235, 0.05);
+            border-bottom: 1px solid rgba(245, 240, 235, 0.05);
+        }
+
+        .marquee-track {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            margin: 20px auto 0;
-            box-shadow: 0 4px 15px rgba(192, 57, 43, 0.4);
+            animation: marquee 20s linear infinite;
+            white-space: nowrap;
         }
 
-        /* ===== SECTION TITLE ===== */
-        .section-title {
-            text-align: center;
-            margin-bottom: 60px;
+        .marquee-track span {
+            font-family: 'Playfair Display', serif;
+            font-weight: 900;
+            font-size: clamp(60px, 10vw, 120px);
+            text-transform: uppercase;
+            color: transparent;
+            -webkit-text-stroke: 1px rgba(245, 240, 235, 0.12);
+            padding: 0 40px;
+            flex-shrink: 0;
         }
 
-        .section-title h2 {
-            font-family: 'Great Vibes', cursive;
-            font-size: clamp(36px, 6vw, 56px);
-            background: linear-gradient(135deg, var(--pink), var(--gold));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .marquee-track span.filled {
+            color: var(--text);
+            -webkit-text-stroke: none;
         }
 
-        .section-title p {
-            color: rgba(255, 255, 255, 0.5);
-            font-weight: 200;
-            margin-top: 10px;
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
         }
 
         /* ===== COUNTDOWN ===== */
         .countdown-section {
-            position: relative;
-            padding: 80px 20px;
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 80px 24px;
             text-align: center;
-            z-index: 2;
+        }
+
+        .countdown-label {
+            font-size: 10px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            margin-bottom: 16px;
+        }
+
+        .countdown-title {
+            font-family: 'Playfair Display', serif;
+            font-weight: 900;
+            font-size: clamp(28px, 5vw, 48px);
+            text-transform: uppercase;
+            margin-bottom: 60px;
+        }
+
+        .countdown-title .accent {
+            font-style: italic;
+            color: var(--accent);
         }
 
         .countdown-grid {
             display: flex;
-            justify-content: center;
-            gap: 20px;
+            gap: 4px;
             flex-wrap: wrap;
-            margin-top: 30px;
+            justify-content: center;
         }
 
         .countdown-item {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(253, 121, 168, 0.15);
-            border-radius: 20px;
-            padding: 25px 20px;
-            min-width: 100px;
-            transition: all 0.3s ease;
+            padding: 32px 24px;
+            min-width: 120px;
+            border: 1px solid rgba(245, 240, 235, 0.06);
+            transition: border-color 0.4s ease;
         }
 
         .countdown-item:hover {
-            border-color: rgba(253, 121, 168, 0.4);
-            transform: translateY(-5px);
+            border-color: rgba(245, 240, 235, 0.15);
         }
 
         .countdown-number {
             font-family: 'Playfair Display', serif;
-            font-size: 42px;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--pink), var(--gold));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 48px;
+            font-weight: 900;
+            letter-spacing: -0.02em;
         }
 
-        .countdown-label {
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.5);
+        .countdown-unit {
+            font-size: 10px;
+            letter-spacing: 3px;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-top: 5px;
+            color: var(--text-dim);
+            margin-top: 8px;
+        }
+
+        /* ===== BIG TEXT SECTION ===== */
+        .big-text-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 80px 24px;
+            text-align: center;
+        }
+
+        .big-text {
+            font-family: 'Playfair Display', serif;
+            font-weight: 900;
+            font-size: clamp(48px, 12vw, 160px);
+            text-transform: uppercase;
+            line-height: 0.9;
+            letter-spacing: -0.03em;
+        }
+
+        .big-text .line {
+            display: block;
+            overflow: hidden;
+        }
+
+        .big-text .line span {
+            display: inline-block;
+            transform: translateY(110%);
+            transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .big-text .line span.visible {
+            transform: translateY(0);
+        }
+
+        .big-text .accent {
+            font-style: italic;
+            color: var(--accent);
+        }
+
+        .big-text .warm {
+            font-style: italic;
+            color: var(--highlight);
         }
 
         /* ===== FOOTER ===== */
         .footer {
             text-align: center;
-            padding: 60px 20px;
-            z-index: 2;
-            position: relative;
+            padding: 60px 24px 40px;
+            border-top: 1px solid rgba(245, 240, 235, 0.05);
         }
 
-        .footer .big-heart {
-            font-size: 60px;
-            animation: heartPulse 1.5s ease-in-out infinite;
+        .footer-text {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 16px;
+            color: var(--accent-warm);
         }
 
-        .footer p {
-            font-family: 'Great Vibes', cursive;
-            font-size: 28px;
-            color: var(--pink);
-            margin-top: 20px;
+        .footer-small {
+            font-size: 10px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            margin-top: 16px;
         }
 
-        .footer .small-text {
-            font-family: 'Kanit', sans-serif;
-            font-size: 12px;
-            font-weight: 200;
-            color: rgba(255, 255, 255, 0.3);
-            margin-top: 15px;
+        /* ===== SCROLL REVEAL ===== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* ===== PETAL RAIN ===== */
-        .petal {
-            position: fixed;
-            pointer-events: none;
-            z-index: 3;
-            animation: petalFall linear forwards;
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
-        @keyframes petalFall {
-            0% { transform: translateY(-20px) rotate(0deg) translateX(0); opacity: 1; }
-            25% { transform: translateY(25vh) rotate(90deg) translateX(30px); }
-            50% { transform: translateY(50vh) rotate(180deg) translateX(-20px); }
-            75% { transform: translateY(75vh) rotate(270deg) translateX(25px); }
-            100% { transform: translateY(110vh) rotate(360deg) translateX(-10px); opacity: 0; }
-        }
-
-        /* ===== PARTICLE BG ===== */
-        #particle-canvas {
+        /* ===== GRAIN CANVAS ===== */
+        #grain-canvas {
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            z-index: 0;
             pointer-events: none;
+            z-index: 9997;
+            opacity: 0.035;
+        }
+
+        /* ===== SMOOTH CURSOR LINE ===== */
+        .cursor-line {
+            position: fixed;
+            width: 1px;
+            height: 100vh;
+            background: linear-gradient(to bottom, transparent, rgba(200, 162, 200, 0.06), transparent);
+            pointer-events: none;
+            z-index: 1;
+            transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
     </style>
 </head>
@@ -492,105 +503,126 @@
 
     <!-- Loading Screen -->
     <div id="loading-screen">
-        <div class="loading-heart">💝</div>
-        <div class="loading-text">Preparing something special...</div>
+        <div class="loading-line"></div>
     </div>
 
-    <!-- Particle Background -->
-    <canvas id="particle-canvas"></canvas>
+    <!-- Grain -->
+    <canvas id="grain-canvas"></canvas>
 
-    <!-- Floating Hearts -->
-    <div class="floating-hearts" id="floating-hearts"></div>
+    <!-- Subtle cursor line -->
+    <div class="cursor-line" id="cursor-line"></div>
 
-    <!-- ===== HERO SECTION ===== -->
-    <section class="hero" id="hero">
-        <div class="hero-content">
-            <div class="date-badge">14 February 2026</div>
-            <h1>Happy Valentine's Day</h1>
-            <h2>To the love of my life</h2>
-            <div class="hero-divider"></div>
-            <p class="hero-message">
-                Every moment with you is a beautiful memory.
-                You are my sunshine, my heart, and my everything.
-            </p>
-        </div>
-        <div class="scroll-hint">
-            <span>Scroll Down</span>
-            <span class="arrow">↓</span>
+    <!-- ===== HERO ===== -->
+    <section class="hero">
+        <div class="hero-badge">14 February 2026</div>
+        <h1 class="hero-title">
+            <span class="line"><span><em class="accent">HAPPY</em> VALENTINE'S</span></span>
+            <span class="line"><span>DAY, MY <em class="warm">LOVE</em></span></span>
+        </h1>
+        <p class="hero-sub">Every moment with you is everything</p>
+        <div class="scroll-indicator">
+            <span>Scroll</span>
+            <div class="scroll-line"></div>
         </div>
     </section>
 
-    <!-- ===== THREE.JS 3D BOUQUET SECTION ===== -->
-    <section class="threejs-section" id="threejs-section">
+    <!-- ===== MARQUEE ===== -->
+    <div class="marquee-section">
+        <div class="marquee-track">
+            <span>LOVE</span>
+            <span class="filled">FOREVER</span>
+            <span>YOURS</span>
+            <span class="filled">ALWAYS</span>
+            <span>TOGETHER</span>
+            <span class="filled">ETERNAL</span>
+            <span>LOVE</span>
+            <span class="filled">FOREVER</span>
+            <span>YOURS</span>
+            <span class="filled">ALWAYS</span>
+            <span>TOGETHER</span>
+            <span class="filled">ETERNAL</span>
+        </div>
+    </div>
+
+    <!-- ===== THREE.JS 3D BOUQUET ===== -->
+    <section class="threejs-section">
         <div id="three-container">
             <canvas id="three-canvas"></canvas>
             <div class="three-overlay">
-                <h3>A Bouquet for You</h3>
-                <p>Drag to rotate &bull; Scroll to zoom</p>
+                <h3>A Bouquet <em class="accent" style="font-style:italic;color:var(--accent);">For You</em></h3>
+                <p>Drag to rotate</p>
             </div>
         </div>
     </section>
 
+    <!-- ===== BIG TEXT ===== -->
+    <section class="big-text-section">
+        <h2 class="big-text" id="big-text">
+            <span class="line"><span>YOU ARE MY</span></span>
+            <span class="line"><span><em class="accent">SUNSHINE</em>,</span></span>
+            <span class="line"><span>MY <em class="warm">HEART</em>,</span></span>
+            <span class="line"><span>& MY <em class="accent">EVERYTHING</em></span></span>
+        </h2>
+    </section>
+
     <!-- ===== LOVE LETTER ===== -->
-    <section class="love-letter-section" id="letter-section">
-        <div class="envelope">
-            <div class="envelope-wrapper">
-                <div class="envelope-body">
-                    <div class="letter-stamp">💌</div>
-                    <div class="letter-content">
-                        <div class="to">To: My Dearest ❤️</div>
-                        <h3>My Love Letter</h3>
-                        <p>
-                            From the first moment I saw you, I knew my life would never be the same.
-                            Your smile lights up my world, and your laughter is my favorite melody.
-                        </p>
-                        <p>
-                            Every day with you feels like a beautiful dream that I never want to wake up from.
-                            You make the ordinary extraordinary.
-                        </p>
-                        <p>
-                            Thank you for being you. Thank you for choosing me.
-                            I promise to love you more with each passing day.
-                        </p>
-                        <div class="signature">Forever Yours 💕</div>
-                    </div>
-                    <div class="letter-seal">💋</div>
-                </div>
+    <section class="letter-section">
+        <div class="letter-card" id="letter-card">
+            <div class="letter-label">A Letter For You</div>
+            <div class="letter-divider"></div>
+            <h3 class="letter-heading">MY <em class="accent">DEAREST</em></h3>
+            <div class="letter-body">
+                <p>
+                    ขอบคุณนะ ที่รักและดูแลเค้ามาตลอดขนาดนี้
+                บางทีเค้าก็นึกย้อนกลับไปถึงวันแรกที่เราเจอกันอยู่บ่อย ๆ
+แล้วก็แอบขอบคุณตัวเองเสมอ ที่วันนั้นกล้าทักเธอออกไป
+เพราะถ้าไม่ได้ทำแบบนั้น ชีวิตเค้าคงไม่มีความสุขเท่าวันนี้
+                </p>
+                <p>
+                    วาเลนไทน์ปีนี้เป็นครั้งแรกของเรา
+และเค้าเชื่อว่ามันจะไม่ใช่ครั้งสุดท้ายแน่นอน
+ช่วงที่ผ่านมาเค้าอาจจะยุ่งไปบ้าง
+แต่ก็อยากให้เธอรู้ว่าเค้าตั้งใจเลือกทั้งร้าน ทั้งของขวัญให้เธอจริง ๆ
+หวังว่าเธอจะชอบนะ
+                </p>
+                <p>
+                    ต่อจากนี้เค้าก็อยากจะรักเธอแบบเดิม แบบทุกวัน
+ขอบคุณที่เข้ามาทำให้ชีวิตเค้ามีความหมายขึ้นมาอีกครั้ง
+ขอบคุณที่อยู่ตรงนี้เสมอ
+                </p>
             </div>
+            <div class="letter-signature">Forever Yours</div>
         </div>
     </section>
 
     <!-- ===== COUNTDOWN ===== -->
-    <section class="countdown-section" id="countdown">
-        <div class="section-title">
-            <h2>Time Together</h2>
-            <p>Every second with you counts</p>
-        </div>
-        <div class="countdown-grid">
+    <section class="countdown-section">
+        <div class="countdown-label">Since 21 August 2025</div>
+        <h2 class="countdown-title reveal">TIME <em class="accent">TOGETHER</em></h2>
+        <div class="countdown-grid reveal">
             <div class="countdown-item">
                 <div class="countdown-number" id="count-days">0</div>
-                <div class="countdown-label">Days</div>
+                <div class="countdown-unit">Days</div>
             </div>
             <div class="countdown-item">
                 <div class="countdown-number" id="count-hours">0</div>
-                <div class="countdown-label">Hours</div>
+                <div class="countdown-unit">Hours</div>
             </div>
             <div class="countdown-item">
                 <div class="countdown-number" id="count-minutes">0</div>
-                <div class="countdown-label">Minutes</div>
+                <div class="countdown-unit">Minutes</div>
             </div>
             <div class="countdown-item">
                 <div class="countdown-number" id="count-seconds">0</div>
-                <div class="countdown-label">Seconds</div>
+                <div class="countdown-unit">Seconds</div>
             </div>
         </div>
     </section>
 
     <!-- ===== FOOTER ===== -->
     <footer class="footer">
-        <div class="big-heart">💖</div>
-        <p>I Love You Forever</p>
-        <div class="small-text">Made with love, just for you 💕</div>
+        <div class="footer-text">I Love You Forever</div>
+        <div class="footer-small">Made with love, just for you</div>
     </footer>
 
     <!-- THREE.JS -->
@@ -602,121 +634,77 @@
         window.addEventListener('load', () => {
             setTimeout(() => {
                 document.getElementById('loading-screen').classList.add('hidden');
-                startPetalRain();
-            }, 2500);
+            }, 1500);
         });
 
-        // ===== PARTICLE BACKGROUND =====
-        const particleCanvas = document.getElementById('particle-canvas');
-        const pCtx = particleCanvas.getContext('2d');
-        let particles = [];
+        // ===== GRAIN ANIMATION =====
+        const grainCanvas = document.getElementById('grain-canvas');
+        const gCtx = grainCanvas.getContext('2d');
 
-        function resizeParticleCanvas() {
-            particleCanvas.width = window.innerWidth;
-            particleCanvas.height = window.innerHeight;
+        function resizeGrain() {
+            grainCanvas.width = window.innerWidth / 2;
+            grainCanvas.height = window.innerHeight / 2;
         }
-        resizeParticleCanvas();
-        window.addEventListener('resize', resizeParticleCanvas);
+        resizeGrain();
+        window.addEventListener('resize', resizeGrain);
 
-        class Particle {
-            constructor() {
-                this.reset();
+        function renderGrain() {
+            const w = grainCanvas.width;
+            const h = grainCanvas.height;
+            const imageData = gCtx.createImageData(w, h);
+            const data = imageData.data;
+            for (let i = 0; i < data.length; i += 4) {
+                const v = Math.random() * 255;
+                data[i] = v;
+                data[i + 1] = v;
+                data[i + 2] = v;
+                data[i + 3] = 255;
             }
-            reset() {
-                this.x = Math.random() * particleCanvas.width;
-                this.y = Math.random() * particleCanvas.height;
-                this.size = Math.random() * 2 + 0.5;
-                this.speedX = (Math.random() - 0.5) * 0.3;
-                this.speedY = (Math.random() - 0.5) * 0.3;
-                this.opacity = Math.random() * 0.5 + 0.1;
-                this.color = Math.random() > 0.5 ? '232, 67, 147' : '253, 121, 168';
-            }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                if (this.x < 0 || this.x > particleCanvas.width) this.speedX *= -1;
-                if (this.y < 0 || this.y > particleCanvas.height) this.speedY *= -1;
-            }
-            draw() {
-                pCtx.beginPath();
-                pCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                pCtx.fillStyle = `rgba(${this.color}, ${this.opacity})`;
-                pCtx.fill();
-            }
+            gCtx.putImageData(imageData, 0, 0);
+            requestAnimationFrame(renderGrain);
         }
+        renderGrain();
 
-        for (let i = 0; i < 80; i++) particles.push(new Particle());
-
-        function animateParticles() {
-            pCtx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
-            particles.forEach(p => { p.update(); p.draw(); });
-
-            for (let i = 0; i < particles.length; i++) {
-                for (let j = i + 1; j < particles.length; j++) {
-                    const dx = particles[i].x - particles[j].x;
-                    const dy = particles[i].y - particles[j].y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < 120) {
-                        pCtx.beginPath();
-                        pCtx.moveTo(particles[i].x, particles[i].y);
-                        pCtx.lineTo(particles[j].x, particles[j].y);
-                        pCtx.strokeStyle = `rgba(232, 67, 147, ${0.05 * (1 - dist / 120)})`;
-                        pCtx.stroke();
-                    }
-                }
-            }
-            requestAnimationFrame(animateParticles);
-        }
-        animateParticles();
-
-        // ===== FLOATING HEARTS =====
-        const heartsContainer = document.getElementById('floating-hearts');
-        const heartEmojis = ['💕', '💖', '💗', '💓', '💘', '💝', '🌹', '✨'];
-
-        function createFloatingHeart() {
-            const heart = document.createElement('div');
-            heart.className = 'floating-heart';
-            heart.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
-            heart.style.left = Math.random() * 100 + '%';
-            heart.style.fontSize = (Math.random() * 20 + 12) + 'px';
-            heart.style.animationDuration = (Math.random() * 10 + 10) + 's';
-            heart.style.animationDelay = Math.random() * 5 + 's';
-            heartsContainer.appendChild(heart);
-            setTimeout(() => heart.remove(), 20000);
-        }
-
-        setInterval(createFloatingHeart, 2000);
-        for (let i = 0; i < 8; i++) createFloatingHeart();
-
-        // ===== SPARKLE CURSOR =====
+        // ===== CURSOR LINE =====
+        const cursorLine = document.getElementById('cursor-line');
         document.addEventListener('mousemove', (e) => {
-            if (Math.random() > 0.85) {
-                const sparkle = document.createElement('div');
-                sparkle.className = 'sparkle';
-                sparkle.textContent = ['✨', '💕', '⭐', '💫'][Math.floor(Math.random() * 4)];
-                sparkle.style.left = e.clientX + 'px';
-                sparkle.style.top = e.clientY + 'px';
-                sparkle.style.fontSize = (Math.random() * 12 + 8) + 'px';
-                document.body.appendChild(sparkle);
-                setTimeout(() => sparkle.remove(), 800);
-            }
+            cursorLine.style.left = e.clientX + 'px';
         });
 
-        // ===== PETAL RAIN =====
-        function startPetalRain() {
-            const petals = ['🌸', '🏵️', '💮', '🌺'];
-            setInterval(() => {
-                const petal = document.createElement('div');
-                petal.className = 'petal';
-                petal.textContent = petals[Math.floor(Math.random() * petals.length)];
-                petal.style.left = Math.random() * 100 + 'vw';
-                petal.style.fontSize = (Math.random() * 16 + 10) + 'px';
-                petal.style.animationDuration = (Math.random() * 4 + 4) + 's';
-                petal.style.opacity = Math.random() * 0.6 + 0.2;
-                document.body.appendChild(petal);
-                setTimeout(() => petal.remove(), 8000);
-            }, 600);
-        }
+        // ===== SCROLL REVEAL =====
+        const observerOptions = { threshold: 0.15, rootMargin: '0px 0px -50px 0px' };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal, .letter-card').forEach(el => observer.observe(el));
+
+        // ===== BIG TEXT SCROLL REVEAL =====
+        const bigTextLines = document.querySelectorAll('.big-text .line span');
+        const bigTextObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const lines = entry.target.querySelectorAll('.line span');
+                    lines.forEach((line, i) => {
+                        setTimeout(() => line.classList.add('visible'), i * 150);
+                    });
+                }
+            });
+        }, { threshold: 0.2 });
+        bigTextObserver.observe(document.getElementById('big-text'));
+
+        // ===== PARALLAX ON HERO =====
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            const hero = document.querySelector('.hero-title');
+            if (hero) {
+                hero.style.transform = `translateY(${scrollY * 0.15}px)`;
+            }
+        });
 
         // ===== THREE.JS 3D BOUQUET =====
         let scene, camera, renderer, controls;
@@ -727,7 +715,7 @@
             const canvas = document.getElementById('three-canvas');
 
             scene = new THREE.Scene();
-            scene.fog = new THREE.FogExp2(0x1a0a1e, 0.008);
+            scene.fog = new THREE.FogExp2(0x1a1a1a, 0.008);
 
             camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
             camera.position.set(0, 3.5, 8);
@@ -741,21 +729,17 @@
             renderer.toneMappingExposure = 1.3;
             renderer.outputEncoding = THREE.sRGBEncoding;
 
-            // Controls
             controls = new THREE.OrbitControls(camera, canvas);
             controls.enableDamping = true;
             controls.dampingFactor = 0.05;
-            controls.enableZoom = true;
-            controls.minDistance = 4;
-            controls.maxDistance = 14;
+            controls.enableZoom = false;
             controls.autoRotate = true;
-            controls.autoRotateSpeed = 1.0;
+            controls.autoRotateSpeed = 0.8;
             controls.target.set(0, 1.2, 0);
             controls.maxPolarAngle = Math.PI * 0.75;
             controls.minPolarAngle = Math.PI * 0.15;
 
-            // ===== STUDIO LIGHTING for realistic roses =====
-            // Key light - warm directional
+            // Studio lighting
             const keyLight = new THREE.DirectionalLight(0xfff5ee, 1.4);
             keyLight.position.set(4, 10, 6);
             keyLight.castShadow = true;
@@ -763,38 +747,36 @@
             keyLight.shadow.mapSize.height = 2048;
             scene.add(keyLight);
 
-            // Fill light - softer, cooler
             const fillLight = new THREE.DirectionalLight(0xffe8f0, 0.6);
             fillLight.position.set(-6, 5, 4);
             scene.add(fillLight);
 
-            // Rim/back light
             const rimLight = new THREE.DirectionalLight(0xffd4e0, 0.5);
             rimLight.position.set(0, 6, -6);
             scene.add(rimLight);
 
-            // Ambient
             const ambientLight = new THREE.AmbientLight(0xffe0ec, 0.5);
             scene.add(ambientLight);
 
-            // Warm accent from below
-            const warmUp = new THREE.PointLight(0xffeedd, 0.3, 15);
+            const warmUp = new THREE.PointLight(0xffeedd, 0.4, 15);
             warmUp.position.set(0, -1, 4);
             scene.add(warmUp);
 
-            // Subtle red accent for the roses
-            const roseGlow = new THREE.PointLight(0xff6b6b, 0.3, 12);
-            roseGlow.position.set(0, 4, 0);
+            const roseGlow = new THREE.PointLight(0xff6b6b, 0.4, 12);
+            roseGlow.position.set(0, 3, 0);
             scene.add(roseGlow);
 
-            // Create bouquet
+            // Soft pink accent from the side
+            const pinkAccent = new THREE.PointLight(0xff9eb5, 0.25, 10);
+            pinkAccent.position.set(-3, 2, 3);
+            scene.add(pinkAccent);
+
             bouquet = new THREE.Group();
             scene.add(bouquet);
 
             createBouquet();
             createFloatingParticles3D();
 
-            // Window resize
             window.addEventListener('resize', () => {
                 camera.aspect = container.clientWidth / container.clientHeight;
                 camera.updateProjectionMatrix();
@@ -804,58 +786,93 @@
             animateThreeJS();
         }
 
-        // ===== MINIMAL CLEAN ROSE =====
+        // Rose color palettes
+        const rosePalettes = [
+            { core: 0x6b0020, mid: 0x9b1b3a, outer: 0xc62847, tip: 0xe84068 },  // Deep crimson
+            { core: 0x8b0000, mid: 0xb91c1c, outer: 0xd43d3d, tip: 0xe85656 },  // Classic red
+            { core: 0x7a1040, mid: 0xa82255, outer: 0xc9386b, tip: 0xdf5585 },  // Rose pink
+            { core: 0x5c0a2a, mid: 0x8a1538, outer: 0xb32040, tip: 0xd44060 },  // Wine red
+            { core: 0x900020, mid: 0xb5002a, outer: 0xd4003a, tip: 0xf0204e },  // Bright red
+        ];
+
         function createRose(x, y, z, scale = 1, rotY = 0) {
             const roseGroup = new THREE.Group();
+            const palette = rosePalettes[Math.floor(Math.random() * rosePalettes.length)];
 
-            const core = 0x8b0000;
-            const mid = 0xb91c1c;
-            const outer = 0xd32f2f;
+            const velvet = (color) => new THREE.MeshStandardMaterial({
+                color, roughness: 0.55, metalness: 0.02, side: THREE.DoubleSide
+            });
 
-            // Center bud
+            // Center bud - tighter, more detailed
             const bud = new THREE.Mesh(
-                new THREE.SphereGeometry(0.06, 16, 12),
-                new THREE.MeshStandardMaterial({ color: core, roughness: 0.3, metalness: 0.08 })
+                new THREE.SphereGeometry(0.055, 20, 16),
+                new THREE.MeshStandardMaterial({ color: palette.core, roughness: 0.4, metalness: 0.05 })
             );
-            bud.position.y = 0.18;
+            bud.position.y = 0.2;
             roseGroup.add(bud);
 
-            // Inner spiral - 5 tight petals
-            for (let i = 0; i < 5; i++) {
-                const a = (i / 5) * Math.PI * 2 + 0.4;
+            // Layer 1 - innermost tight spiral (6 petals)
+            for (let i = 0; i < 6; i++) {
+                const a = (i / 6) * Math.PI * 2 + 0.5;
                 const p = new THREE.Mesh(
-                    new THREE.SphereGeometry(0.09, 12, 10, 0, Math.PI * 1.6, 0, Math.PI * 0.55),
-                    new THREE.MeshStandardMaterial({ color: core, roughness: 0.3, metalness: 0.05, side: THREE.DoubleSide })
+                    new THREE.SphereGeometry(0.08, 16, 12, 0, Math.PI * 1.5, 0, Math.PI * 0.5),
+                    velvet(palette.core)
                 );
-                p.position.set(Math.cos(a) * 0.06, 0.15, Math.sin(a) * 0.06);
-                p.rotation.set(-0.45, a + 0.3, 0);
-                p.scale.set(1, 1.2, 0.9);
+                p.position.set(Math.cos(a) * 0.05, 0.17, Math.sin(a) * 0.05);
+                p.rotation.set(-0.35, a + 0.4, Math.sin(a) * 0.1);
+                p.scale.set(1, 1.3, 0.85);
                 roseGroup.add(p);
             }
 
-            // Mid petals - 7 opening
+            // Layer 2 - inner petals starting to open (7 petals)
             for (let i = 0; i < 7; i++) {
-                const a = (i / 7) * Math.PI * 2 + 0.2;
+                const a = (i / 7) * Math.PI * 2 + 0.25;
                 const p = new THREE.Mesh(
-                    new THREE.SphereGeometry(0.13, 12, 10, 0, Math.PI * 1.8, 0, Math.PI * 0.48),
-                    new THREE.MeshStandardMaterial({ color: mid, roughness: 0.33, metalness: 0.04, side: THREE.DoubleSide })
+                    new THREE.SphereGeometry(0.1, 16, 12, 0, Math.PI * 1.7, 0, Math.PI * 0.5),
+                    velvet(palette.mid)
                 );
-                p.position.set(Math.cos(a) * 0.13, 0.08, Math.sin(a) * 0.13);
-                p.rotation.set(-0.8, a, 0);
-                p.scale.set(1.05, 1.15, 0.85);
+                p.position.set(Math.cos(a) * 0.1, 0.12, Math.sin(a) * 0.1);
+                p.rotation.set(-0.6, a + 0.2, Math.cos(a) * 0.08);
+                p.scale.set(1.05, 1.2, 0.8);
                 roseGroup.add(p);
             }
 
-            // Outer petals - 8 fully open
-            for (let i = 0; i < 8; i++) {
-                const a = (i / 8) * Math.PI * 2 + 0.1;
+            // Layer 3 - mid petals curving outward (9 petals)
+            for (let i = 0; i < 9; i++) {
+                const a = (i / 9) * Math.PI * 2 + 0.15;
                 const p = new THREE.Mesh(
-                    new THREE.SphereGeometry(0.17, 12, 10, 0, Math.PI * 2, 0, Math.PI * 0.4),
-                    new THREE.MeshStandardMaterial({ color: outer, roughness: 0.36, metalness: 0.03, side: THREE.DoubleSide })
+                    new THREE.SphereGeometry(0.14, 16, 12, 0, Math.PI * 1.85, 0, Math.PI * 0.45),
+                    velvet(palette.outer)
                 );
-                p.position.set(Math.cos(a) * 0.24, -0.03, Math.sin(a) * 0.24);
-                p.rotation.set(-1.15, a, 0);
-                p.scale.set(1.1, 1.05, 0.8);
+                p.position.set(Math.cos(a) * 0.17, 0.04, Math.sin(a) * 0.17);
+                p.rotation.set(-0.9, a, Math.sin(a * 2) * 0.1);
+                p.scale.set(1.08, 1.15, 0.82);
+                roseGroup.add(p);
+            }
+
+            // Layer 4 - outer petals fully open (10 petals)
+            for (let i = 0; i < 10; i++) {
+                const a = (i / 10) * Math.PI * 2 + 0.08;
+                const p = new THREE.Mesh(
+                    new THREE.SphereGeometry(0.18, 16, 12, 0, Math.PI * 2, 0, Math.PI * 0.38),
+                    velvet(palette.tip)
+                );
+                p.position.set(Math.cos(a) * 0.26, -0.06, Math.sin(a) * 0.26);
+                p.rotation.set(-1.2, a, Math.cos(a) * 0.12);
+                p.scale.set(1.12, 1.05, 0.78);
+                roseGroup.add(p);
+            }
+
+            // Layer 5 - outermost petals slightly drooping (6 petals, larger)
+            for (let i = 0; i < 6; i++) {
+                const a = (i / 6) * Math.PI * 2 + 0.3;
+                const p = new THREE.Mesh(
+                    new THREE.SphereGeometry(0.16, 14, 10, 0, Math.PI * 2, 0, Math.PI * 0.32),
+                    velvet(palette.tip)
+                );
+                p.position.set(Math.cos(a) * 0.32, -0.12, Math.sin(a) * 0.32);
+                p.rotation.set(-1.4, a, Math.sin(a) * 0.15);
+                p.scale.set(1.15, 0.95, 0.75);
                 roseGroup.add(p);
             }
 
@@ -866,84 +883,147 @@
         }
 
         function createBouquet() {
+            // ===== ELEGANT KRAFT PAPER WRAPPER =====
+            const paperColor = 0xf0e6d3;
+            const paperInner = 0xe8dcc8;
+            const paperMat = new THREE.MeshStandardMaterial({
+                color: paperColor, roughness: 0.72, metalness: 0.0, side: THREE.DoubleSide
+            });
+            const paperInnerMat = new THREE.MeshStandardMaterial({
+                color: paperInner, roughness: 0.68, metalness: 0.0, side: THREE.DoubleSide
+            });
 
-            // ===== CLEAN WHITE WRAPPER =====
+            // Main cone body - smoother, more elegant shape
             const wrapperPoints = [];
-            for (let i = 0; i <= 20; i++) {
-                const t = i / 20;
-                wrapperPoints.push(new THREE.Vector2(0.3 + t * 2.0, t * 3.5));
+            for (let i = 0; i <= 24; i++) {
+                const t = i / 24;
+                const radius = 0.2 + t * t * 2.2;
+                wrapperPoints.push(new THREE.Vector2(radius, t * 3.8));
             }
             const wrapper = new THREE.Mesh(
-                new THREE.LatheGeometry(wrapperPoints, 64),
-                new THREE.MeshStandardMaterial({ color: 0xfafafa, roughness: 0.6, side: THREE.DoubleSide })
+                new THREE.LatheGeometry(wrapperPoints, 80),
+                paperMat
             );
-            wrapper.position.y = -2.5;
+            wrapper.position.y = -2.8;
             wrapper.castShadow = true;
             wrapper.receiveShadow = true;
             bouquet.add(wrapper);
 
-            // Simple elegant paper folds - just 10 clean ones
-            for (let i = 0; i < 10; i++) {
-                const angle = (i / 10) * Math.PI * 2;
-                const foldGeom = new THREE.PlaneGeometry(1.3, 1.6, 3, 3);
+            // Tissue paper lining (slightly visible inside, lighter cream)
+            const tissuePoints = [];
+            for (let i = 0; i <= 16; i++) {
+                const t = i / 16;
+                const radius = 0.8 + t * 1.6;
+                tissuePoints.push(new THREE.Vector2(radius, t * 1.8));
+            }
+            const tissue = new THREE.Mesh(
+                new THREE.LatheGeometry(tissuePoints, 60),
+                new THREE.MeshStandardMaterial({
+                    color: 0xfff8f0, roughness: 0.8, metalness: 0.0, side: THREE.DoubleSide,
+                    transparent: true, opacity: 0.85
+                })
+            );
+            tissue.position.y = -0.2;
+            bouquet.add(tissue);
+
+            // Paper folds/ruffles at the top - elegant wavy edges
+            for (let i = 0; i < 14; i++) {
+                const angle = (i / 14) * Math.PI * 2;
+                const foldGeom = new THREE.PlaneGeometry(1.6, 2.0, 6, 6);
                 const pos = foldGeom.attributes.position;
                 for (let v = 0; v < pos.count; v++) {
-                    pos.setZ(v, Math.sin(pos.getX(v) * 2) * 0.1);
+                    const px = pos.getX(v);
+                    const py = pos.getY(v);
+                    // Natural paper crumple effect
+                    pos.setZ(v, Math.sin(px * 2.5) * 0.12 + Math.cos(py * 1.8) * 0.06);
+                    // Slight curl at top edge
+                    if (py > 0.6) {
+                        pos.setZ(v, pos.getZ(v) + (py - 0.6) * 0.25);
+                    }
                 }
                 foldGeom.computeVertexNormals();
 
-                const fold = new THREE.Mesh(foldGeom, new THREE.MeshStandardMaterial({
-                    color: 0xf5f5f5, roughness: 0.55, side: THREE.DoubleSide
-                }));
-                fold.position.set(Math.cos(angle) * 2.0, 0.6, Math.sin(angle) * 2.0);
-                fold.rotation.set(-0.3, angle + Math.PI, 0);
+                const isInner = i % 2 === 0;
+                const fold = new THREE.Mesh(foldGeom, isInner ? paperInnerMat.clone() : paperMat.clone());
+                const dist = isInner ? 1.85 : 2.05;
+                const height = isInner ? 0.8 : 0.5;
+                fold.position.set(Math.cos(angle) * dist, height, Math.sin(angle) * dist);
+                fold.rotation.set(-0.25 - Math.random() * 0.15, angle + Math.PI, Math.sin(angle) * 0.08);
+                fold.scale.set(0.9 + Math.random() * 0.15, 0.85 + Math.random() * 0.2, 1);
                 bouquet.add(fold);
             }
 
-            // ===== CLEAN RED RIBBON =====
+            // ===== SATIN RIBBON =====
             const ribbonMat = new THREE.MeshStandardMaterial({
-                color: 0xcc2222, roughness: 0.15, metalness: 0.5
+                color: 0xb8243b, roughness: 0.18, metalness: 0.35
+            });
+            const ribbonDarkMat = new THREE.MeshStandardMaterial({
+                color: 0x8c1a2d, roughness: 0.2, metalness: 0.4
             });
 
-            // Single ribbon ring
-            const ribbon = new THREE.Mesh(new THREE.TorusGeometry(0.95, 0.09, 12, 48), ribbonMat);
-            ribbon.position.y = -0.1;
-            ribbon.rotation.x = Math.PI * 0.5;
-            bouquet.add(ribbon);
+            // Main ribbon wrap - two rings for thickness
+            const ribbon1 = new THREE.Mesh(new THREE.TorusGeometry(1.0, 0.1, 14, 56), ribbonMat);
+            ribbon1.position.y = -0.3;
+            ribbon1.rotation.x = Math.PI * 0.5;
+            bouquet.add(ribbon1);
 
-            // Simple bow - two loops
-            function makeBowLoop(offX, rz) {
+            const ribbon2 = new THREE.Mesh(new THREE.TorusGeometry(1.0, 0.08, 14, 56), ribbonDarkMat);
+            ribbon2.position.y = -0.15;
+            ribbon2.rotation.x = Math.PI * 0.5;
+            bouquet.add(ribbon2);
+
+            // Bow loops - fuller, more elegant
+            function makeBowLoop(offX, offZ, scaleY) {
                 const curve = new THREE.CatmullRomCurve3([
                     new THREE.Vector3(0, 0, 0),
-                    new THREE.Vector3(offX * 0.5, 0.35, 0.1),
-                    new THREE.Vector3(offX * 0.85, 0.5, 0),
-                    new THREE.Vector3(offX * 0.5, 0.3, -0.1),
+                    new THREE.Vector3(offX * 0.35, 0.25, offZ * 0.15),
+                    new THREE.Vector3(offX * 0.65, 0.45, offZ * 0.05),
+                    new THREE.Vector3(offX * 0.9, 0.55, 0),
+                    new THREE.Vector3(offX * 0.65, 0.4, -offZ * 0.1),
+                    new THREE.Vector3(offX * 0.3, 0.2, -offZ * 0.12),
                     new THREE.Vector3(0, 0, 0),
                 ]);
                 const mesh = new THREE.Mesh(
-                    new THREE.TubeGeometry(curve, 30, 0.055, 8, false),
+                    new THREE.TubeGeometry(curve, 40, 0.065, 10, false),
                     ribbonMat.clone()
                 );
-                mesh.rotation.z = rz;
+                mesh.scale.y = scaleY || 1;
                 return mesh;
             }
 
-            const bL = makeBowLoop(-0.65, 0.15);
-            bL.position.set(0, -0.1, 1.0);
-            bouquet.add(bL);
+            // 4 bow loops for a fuller bow
+            const bowPos = { x: 0, y: -0.25, z: 1.05 };
 
-            const bR = makeBowLoop(0.65, -0.15);
-            bR.position.set(0, -0.1, 1.0);
-            bouquet.add(bR);
+            const bL1 = makeBowLoop(-0.7, 1, 1);
+            bL1.position.set(bowPos.x, bowPos.y, bowPos.z);
+            bL1.rotation.set(0.1, 0, 0.12);
+            bouquet.add(bL1);
 
-            // Two clean ribbon tails
+            const bR1 = makeBowLoop(0.7, 1, 1);
+            bR1.position.set(bowPos.x, bowPos.y, bowPos.z);
+            bR1.rotation.set(0.1, 0, -0.12);
+            bouquet.add(bR1);
+
+            const bL2 = makeBowLoop(-0.55, -0.5, 0.85);
+            bL2.position.set(bowPos.x, bowPos.y + 0.05, bowPos.z - 0.05);
+            bL2.rotation.set(-0.15, 0.3, 0.2);
+            bouquet.add(bL2);
+
+            const bR2 = makeBowLoop(0.55, -0.5, 0.85);
+            bR2.position.set(bowPos.x, bowPos.y + 0.05, bowPos.z - 0.05);
+            bR2.rotation.set(-0.15, -0.3, -0.2);
+            bouquet.add(bR2);
+
+            // Ribbon tails - longer, more graceful curves
             for (let side = -1; side <= 1; side += 2) {
                 const tail = new THREE.Mesh(
                     new THREE.TubeGeometry(new THREE.CatmullRomCurve3([
-                        new THREE.Vector3(side * 0.05, -0.1, 1.0),
-                        new THREE.Vector3(side * 0.2, -0.7, 1.05),
-                        new THREE.Vector3(side * 0.15, -1.3, 0.95),
-                    ]), 20, 0.04, 8, false),
+                        new THREE.Vector3(side * 0.05, bowPos.y, bowPos.z),
+                        new THREE.Vector3(side * 0.15, bowPos.y - 0.4, bowPos.z + 0.08),
+                        new THREE.Vector3(side * 0.25, bowPos.y - 0.9, bowPos.z + 0.02),
+                        new THREE.Vector3(side * 0.18, bowPos.y - 1.4, bowPos.z - 0.05),
+                        new THREE.Vector3(side * 0.3, bowPos.y - 1.8, bowPos.z - 0.1),
+                    ]), 30, 0.045, 10, false),
                     ribbonMat.clone()
                 );
                 bouquet.add(tail);
@@ -951,67 +1031,73 @@
 
             // Center knot
             const knot = new THREE.Mesh(
-                new THREE.SphereGeometry(0.1, 12, 10),
-                new THREE.MeshStandardMaterial({ color: 0xaa1818, roughness: 0.15, metalness: 0.5 })
+                new THREE.SphereGeometry(0.12, 14, 12),
+                ribbonDarkMat.clone()
             );
-            knot.position.set(0, -0.05, 1.0);
-            knot.scale.set(1, 0.7, 0.7);
+            knot.position.set(bowPos.x, bowPos.y + 0.05, bowPos.z);
+            knot.scale.set(1.1, 0.65, 0.7);
             bouquet.add(knot);
 
-            // ===== DOME OF ROSES - clean arrangement =====
+            // Roses
             const roses = [];
-
-            // Center
             roses.push({ x: 0, y: 2.4, z: 0, s: 1.2 });
-
-            // Ring 1 - 6
             for (let i = 0; i < 6; i++) {
                 const a = (i / 6) * Math.PI * 2;
                 roses.push({ x: Math.cos(a) * 0.48, y: 2.3, z: Math.sin(a) * 0.48, s: 1.1 });
             }
-
-            // Ring 2 - 10
             for (let i = 0; i < 10; i++) {
                 const a = (i / 10) * Math.PI * 2 + 0.15;
                 roses.push({ x: Math.cos(a) * 0.9, y: 2.1, z: Math.sin(a) * 0.9, s: 1.05 });
             }
-
-            // Ring 3 - 14
             for (let i = 0; i < 14; i++) {
                 const a = (i / 14) * Math.PI * 2 + 0.3;
                 roses.push({ x: Math.cos(a) * 1.3, y: 1.85, z: Math.sin(a) * 1.3, s: 1.0 });
             }
-
-            // Ring 4 - outer, 16
             for (let i = 0; i < 16; i++) {
                 const a = (i / 16) * Math.PI * 2 + 0.1;
                 roses.push({ x: Math.cos(a) * 1.65, y: 1.5, z: Math.sin(a) * 1.65, s: 0.95 });
             }
 
-            // Place roses
             roses.forEach((r, i) => {
                 const rose = createRose(r.x, r.y, r.z, r.s, Math.random() * Math.PI * 2);
                 rose.userData = { originalY: r.y, phase: i * 0.3 };
                 bouquet.add(rose);
             });
 
-            // Minimal green leaves - just 8 around edge
-            for (let i = 0; i < 8; i++) {
-                const angle = (i / 8) * Math.PI * 2;
+            // Leaves - more natural with varied greens
+            const leafColors = [0x2d6b2d, 0x3a7a3a, 0x1e5e1e, 0x2a6f35];
+            for (let i = 0; i < 12; i++) {
+                const angle = (i / 12) * Math.PI * 2 + Math.random() * 0.2;
+                const leafColor = leafColors[Math.floor(Math.random() * leafColors.length)];
                 const leaf = new THREE.Mesh(
-                    new THREE.SphereGeometry(0.12, 8, 6, 0, Math.PI * 2, 0, Math.PI * 0.3),
-                    new THREE.MeshStandardMaterial({ color: 0x2d6b2d, roughness: 0.45, side: THREE.DoubleSide })
+                    new THREE.SphereGeometry(0.14, 10, 8, 0, Math.PI * 2, 0, Math.PI * 0.28),
+                    new THREE.MeshStandardMaterial({ color: leafColor, roughness: 0.5, side: THREE.DoubleSide })
                 );
-                leaf.position.set(Math.cos(angle) * 1.55, 1.15, Math.sin(angle) * 1.55);
-                leaf.rotation.set(-Math.PI * 0.5, angle, 0);
-                leaf.scale.set(1, 1.4, 0.5);
+                const r = 1.5 + Math.random() * 0.3;
+                const h = 1.0 + Math.random() * 0.4;
+                leaf.position.set(Math.cos(angle) * r, h, Math.sin(angle) * r);
+                leaf.rotation.set(-Math.PI * 0.55 - Math.random() * 0.2, angle, Math.random() * 0.2);
+                leaf.scale.set(0.9 + Math.random() * 0.4, 1.3 + Math.random() * 0.4, 0.4);
                 bouquet.add(leaf);
+            }
+
+            // Baby's breath (small white flowers scattered around)
+            for (let i = 0; i < 30; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const r = 0.8 + Math.random() * 1.0;
+                const h = 1.6 + Math.random() * 0.8;
+                const tiny = new THREE.Mesh(
+                    new THREE.SphereGeometry(0.025 + Math.random() * 0.015, 8, 6),
+                    new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.6, emissive: 0x443344, emissiveIntensity: 0.1 })
+                );
+                tiny.position.set(Math.cos(angle) * r, h, Math.sin(angle) * r);
+                bouquet.add(tiny);
             }
         }
 
         function createFloatingParticles3D() {
             const particleGeom = new THREE.BufferGeometry();
-            const count = 150;
+            const count = 100;
             const positions = new Float32Array(count * 3);
             const colors = new Float32Array(count * 3);
 
@@ -1021,7 +1107,7 @@
                 positions[i * 3 + 2] = (Math.random() - 0.5) * 18;
 
                 const color = new THREE.Color();
-                color.setHSL(0.95 + Math.random() * 0.08, 0.7, 0.6 + Math.random() * 0.3);
+                color.setHSL(0.95 + Math.random() * 0.08, 0.5, 0.6 + Math.random() * 0.3);
                 colors[i * 3] = color.r;
                 colors[i * 3 + 1] = color.g;
                 colors[i * 3 + 2] = color.b;
@@ -1031,10 +1117,10 @@
             particleGeom.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
             const particleMat = new THREE.PointsMaterial({
-                size: 0.04,
+                size: 0.03,
                 vertexColors: true,
                 transparent: true,
-                opacity: 0.5,
+                opacity: 0.4,
                 blending: THREE.AdditiveBlending
             });
 
@@ -1045,10 +1131,8 @@
 
         function animateThreeJS() {
             requestAnimationFrame(animateThreeJS);
-
             const time = Date.now() * 0.001;
 
-            // Gentle breathing animation on roses
             if (bouquet) {
                 bouquet.children.forEach((child) => {
                     if (child.userData && child.userData.originalY !== undefined) {
@@ -1057,16 +1141,15 @@
                 });
             }
 
-            // Animate 3D particles
             scene.children.forEach(child => {
                 if (child.userData && child.userData.isParticles) {
                     const positions = child.geometry.attributes.position.array;
                     for (let i = 0; i < positions.length; i += 3) {
-                        positions[i + 1] += 0.004;
+                        positions[i + 1] += 0.003;
                         if (positions[i + 1] > 14) positions[i + 1] = 0;
                     }
                     child.geometry.attributes.position.needsUpdate = true;
-                    child.rotation.y = time * 0.03;
+                    child.rotation.y = time * 0.02;
                 }
             });
 
@@ -1074,14 +1157,12 @@
             renderer.render(scene, camera);
         }
 
-        // ===== COUNTDOWN TIMER =====
-        // Start date: 21 August 2025
+        // ===== COUNTDOWN =====
         const startDate = new Date('2025-08-21');
 
         function updateCountdown() {
             const now = new Date();
             const diff = now - startDate;
-
             const days = Math.floor(diff / (1000 * 60 * 60 * 24));
             const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
@@ -1096,7 +1177,7 @@
         updateCountdown();
         setInterval(updateCountdown, 1000);
 
-        // ===== INIT THREE.JS =====
+        // ===== INIT =====
         initThreeJS();
     </script>
 </body>
